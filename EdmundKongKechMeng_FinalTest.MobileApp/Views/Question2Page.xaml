@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:behaviours="clr-namespace:EdmundKongKechMeng_FinalTest.MobileApp.Behaviours"
+             x:Class="EdmundKongKechMeng_FinalTest.MobileApp.Views.Question2Page"
+             Title="Question2Page">
+
+    <StackLayout Margin="40,0" VerticalOptions="CenterAndExpand">
+
+        <!-- Phone Entry -->
+        <Entry x:Name="PhoneEntry"
+               Placeholder="0112223333"
+               HorizontalTextAlignment="Center"
+               Keyboard="Numeric"
+               HorizontalOptions="FillAndExpand">
+            <Entry.Behaviors>
+                <behaviours:EntryValidationBehavior Regex="^\d+$" />
+            </Entry.Behaviors>
+        </Entry>
+        <Label Text="Invalid Phone Number"
+               TextColor="Red"
+               IsVisible="False">
+            <Label.Triggers>
+                <DataTrigger TargetType="Label"
+                             Binding="{Binding Source={x:Reference PhoneEntry}, Path=Text}"
+                             Value="">
+                    <Setter Property="IsVisible" Value="True" />
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+
+        <!-- Password Entry -->
+        <Entry x:Name="PasswordEntry"
+               Placeholder="Password"
+               IsPassword="True"
+               HorizontalTextAlignment="Center"
+               HorizontalOptions="FillAndExpand">
+            <Entry.Behaviors>
+                <behaviours:EntryValidationBehavior Regex=".{6,}" />
+            </Entry.Behaviors>
+        </Entry>
+        <Label Text="Password length should be greater than 5"
+               TextColor="Red"
+               IsVisible="False">
+            <Label.Triggers>
+                <DataTrigger TargetType="Label"
+                             Binding="{Binding Source={x:Reference PasswordEntry}, Path=Text.Length}"
+                             Value="0">
+                    <Setter Property="IsVisible" Value="True" />
+                </DataTrigger>
+            </Label.Triggers>
+        </Label>
+
+        <!-- Terms and Conditions -->
+        <StackLayout Orientation="Horizontal" 
+                     HorizontalOptions="FillAndExpand" 
+                     VerticalOptions="Center" 
+                     Margin="0,15">
+            <CheckBox x:Name="TermsAndConditionsCheckbox" />
+            <Label Text="I have read the terms and conditions"
+                   TextColor="Black"
+                   FontSize="Small"
+                   HorizontalOptions="Start"
+                   Margin="5">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding Source={x:Reference TermsAndConditionsCheckbox}, Path=IsChecked}" />
+                </Label.GestureRecognizers>
+            </Label>
+        </StackLayout>
+
+        <!-- Register Button -->
+        <Button x:Name="RegisterButton"
+                Text="Register"
+                FontSize="Medium"
+                CornerRadius="20"
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="FillAndExpand"
+                IsEnabled="False">
+            <Button.Triggers>
+                <MultiTrigger TargetType="Button">
+                    <MultiTrigger.Conditions>
+                        <BindingCondition Binding="{Binding Source={x:Reference PhoneEntry}, Path=Text.Length}" Value="10" />
+                        <BindingCondition Binding="{Binding Source={x:Reference PasswordEntry}, Path=Text.Length}" Value="6" />
+                        <BindingCondition Binding="{Binding Source={x:Reference TermsAndConditionsCheckbox}, Path=IsChecked}" Value="True" />
+                    </MultiTrigger.Conditions>
+                    <Setter Property="IsEnabled" Value="True" />
+                </MultiTrigger>
+            </Button.Triggers>
+        </Button>
+
+    </StackLayout>
+</ContentPage>
